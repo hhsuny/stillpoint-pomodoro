@@ -118,9 +118,10 @@ const seedStore = (today: string): Store => {
 }
 
 const getStoredStore = (today: string): Store => {
+  const emptyStore = (): Store => ({ tasks: [], sessions: [], summaries: [] })
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (!saved) return seedStore(today)
+    if (!saved) return import.meta.env.DEV ? seedStore(today) : emptyStore()
     const parsed = JSON.parse(saved) as Partial<Store>
     return {
       tasks: Array.isArray(parsed.tasks) ? parsed.tasks : [],
@@ -128,7 +129,7 @@ const getStoredStore = (today: string): Store => {
       summaries: Array.isArray(parsed.summaries) ? parsed.summaries : [],
     }
   } catch {
-    return seedStore(today)
+    return import.meta.env.DEV ? seedStore(today) : emptyStore()
   }
 }
 
