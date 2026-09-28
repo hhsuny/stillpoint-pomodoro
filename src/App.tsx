@@ -365,11 +365,11 @@ function App() {
     if (!timer.running || !timer.endAt) return
     const tick = () => {
       const remaining = Math.max(0, Math.ceil((timer.endAt! - Date.now()) / 1000))
-      setTimer((current) => ({ ...current, remaining }))
+      setTimer((current) => current.remaining === remaining ? current : ({ ...current, remaining }))
       if (remaining <= 0) finishTimerRef.current()
     }
     tick()
-    const interval = window.setInterval(tick, 250)
+    const interval = window.setInterval(tick, 1000)
     return () => window.clearInterval(interval)
   }, [timer.running, timer.endAt])
 
